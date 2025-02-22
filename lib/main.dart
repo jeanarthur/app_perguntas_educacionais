@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       home: const MyHomePage(title: 'App Perguntas Educacionais'),
     );
@@ -54,21 +54,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    // Obtém o tamanho da tela do dispositivo
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Define o tamanho da imagem como uma fração do tamanho da tela
+    double imageSize = screenWidth * 0.9; // Ajuste a fração conforme necessário
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -104,18 +98,48 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            SizedBox(
+              width: imageSize,
+              height: imageSize, // Mantém a proporção 1:1
+              child: Image.asset('assets/images/quiz_default.png'),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: () {},
+                  child: Column(
+                    children: [
+                      Icon(Icons.list_alt, size: 24),
+                      // Text("Temas"),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 20), // Espaçamento horizontal entre os botões
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    backgroundColor: Colors.blue, // Cor de destaque para o botão "Iniciar"
+                    foregroundColor: Colors.white, // Cor do texto do botão
+                  ),
+                  child: Text("Iniciar", style: TextStyle(fontSize: 16)),
+                ),
+                SizedBox(width: 20), // Espaçamento horizontal entre os botões
+                OutlinedButton(
+                  onPressed: () {},
+                  child: Column(
+                    children: [
+                      Icon(Icons.emoji_events, size: 24),
+                      // Text("Rank"),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
