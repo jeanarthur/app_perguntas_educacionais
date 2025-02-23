@@ -99,6 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
+              height: 40, // Mantém a proporção 1:1
+              child: Text('Questionário A', style: TextStyle(fontSize: 24)),
+            ),
+            SizedBox(
               width: imageSize,
               height: imageSize, // Mantém a proporção 1:1
               child: Image.asset('assets/images/quiz_default.png'),
@@ -108,7 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Questionaries())
+                    );
+                  },
                   child: Column(
                     children: [
                       Icon(Icons.list_alt, size: 24),
@@ -128,7 +137,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SizedBox(width: 20), // Espaçamento horizontal entre os botões
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Ranking())
+                    );
+                  },
                   child: Column(
                     children: [
                       Icon(Icons.emoji_events, size: 24),
@@ -141,6 +155,64 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class Questionaries extends StatelessWidget {
+  const Questionaries({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Questionários"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Card(child: ListTile(title: Text('Questionário A'))),
+                  Card(child: ListTile(title: Text('Questionário B'))),
+                  Card(child: ListTile(title: Text('Questionário C'))),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Ranking extends StatelessWidget {
+  const Ranking({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Classificação"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Card(child: ListTile(title: Text('1º Lugar'))),
+                  Card(child: ListTile(title: Text('2ª Lugar'))),
+                  Card(child: ListTile(title: Text('3ª Lugar'))),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
