@@ -56,13 +56,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-
-    // Obtém o tamanho da tela do dispositivo
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // Define o tamanho da imagem como uma fração do tamanho da tela
-    double imageSize = screenWidth * 0.9; // Ajuste a fração conforme necessário
-
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -102,11 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 40, // Mantém a proporção 1:1
               child: Text('Questionário A', style: TextStyle(fontSize: 24)),
             ),
-            SizedBox(
-              width: imageSize,
-              height: imageSize, // Mantém a proporção 1:1
-              child: Image.asset('assets/images/quiz_default.png'),
-            ),
+            Book(),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -157,6 +146,79 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class Book extends StatelessWidget {
+  const Book({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          width: 130,
+          height: 165,
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              color: Colors.blue[800],
+              width: 127,
+              height: 15,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          width: 130,
+          height: 158,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.grey[300],
+              width: 110,
+              height: 8,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          color: Colors.blue,
+          width: 130,
+          height: 150,
+        ),
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          width: 130,
+          height: 150,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0),
+              color: Colors.blue[100],
+              width: 100,
+              height: 15,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(10.0),
+          width: 130,
+          height: 150,
+          child: Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0),
+              color: Colors.blue[100],
+              width: 100,
+              height: 80,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  
 }
 
 class Questionaries extends StatelessWidget {
