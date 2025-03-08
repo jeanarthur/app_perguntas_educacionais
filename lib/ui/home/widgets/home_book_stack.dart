@@ -1,4 +1,4 @@
-import 'package:app_perguntas_educacionais/ui/home/widgets/home_current_book.dart';
+import 'package:app_perguntas_educacionais/ui/core/ui/book.dart';
 import 'package:flutter/material.dart';
 
 class BookStack extends StatelessWidget {

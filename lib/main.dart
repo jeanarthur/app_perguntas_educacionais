@@ -1,4 +1,4 @@
-import 'package:app_perguntas_educacionais/ui/home/widgets/home_screen.dart';
+import 'package:app_perguntas_educacionais/routing/router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,12 +10,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const MyHomePage(title: 'App Perguntas Educacionais'),
+      routerConfig: router(),
     );
   }
 }

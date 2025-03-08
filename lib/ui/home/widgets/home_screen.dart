@@ -1,19 +1,21 @@
-import 'package:app_perguntas_educacionais/ui/categories/widgets/categories_screen.dart';
-import 'package:app_perguntas_educacionais/ui/home/widgets/home_book_stack.dart';
+import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_current_book.dart';
-import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.title, required this.viewModel});
 
   final String title;
+  
+  final dynamic viewModel;
+  
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -26,50 +28,50 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-              height: 40,
-              child: Text('Questionário A', style: TextStyle(fontSize: 24)),
-            ),
-            Book(),
-            SizedBox(height: 20),
+            HomeCurrentBook(),
+            SizedBox(height: 100),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Questionaries())
-                    );
-                  },
-                  child: BookStack(),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white, 
-                  ),
-                  child: Text("Iniciar", style: TextStyle(fontSize: 16)),
-                ),
-                SizedBox(width: 20), 
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Ranking())
-                    );
+                    context.go(Routes.categories);
                   },
                   child: Column(
                     children: [
-                      Icon(Icons.emoji_events, size: 24),
+                      Icon(Icons.list_alt, size: 32)
+                    ],
+                  ),
+                ),
+                SizedBox(width: 20),
+                SizedBox(width: 20), 
+                OutlinedButton(
+                  onPressed: () {
+                    context.go(Routes.ranking);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.emoji_events, size: 32),
                     ],
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text("Iniciar", style: TextStyle(fontSize: 24)),
+                )
+              ],
+            )
           ],
         ),
       ), 
