@@ -30,7 +30,16 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
   }
 
   @override
-  Future<Result<QuizBook>> getSelectedQuizBook() {
+  Future<Result<QuizBook>> getSelectedQuizBook() async {
+    if (_selectedQuizBook == null) {
+      var resultFallback = await getQuizBookList();
+        switch (resultFallback) {
+          case Ok():
+            _selectedQuizBook = resultFallback.value.first;
+          case Error():
+            return Result.error(resultFallback.error);
+        }
+    }
     return Future.value(Result.ok(_selectedQuizBook!));
   }
 
