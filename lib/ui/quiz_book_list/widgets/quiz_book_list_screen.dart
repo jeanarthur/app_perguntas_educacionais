@@ -16,8 +16,10 @@ class Questionaries extends StatelessWidget {
     debugPrint("Categories widget loaded");
 
     return Scaffold(
+      backgroundColor: Colors.brown[500],
       appBar: AppBar(
-        title: Text("Questionários"),
+        title: Text("Questionários", style: TextStyle(color: Colors.grey[200]),),
+        backgroundColor: Colors.brown[600],
         leading: InkWell(
           onTap: () {
             context.go(Routes.home);
@@ -40,14 +42,52 @@ class Questionaries extends StatelessWidget {
                     crossAxisCount: 2,
                     children: [
                       for (QuizBook quizBook in viewModel.quizBookList)
-                        TextButton(
-                          onPressed: () => {
+                        InkWell(
+                          onTap: () => {
                             viewModel.selectBook(quizBook.id),
                             context.go(Routes.home)
                           },
-                          child: Card(
-                            color: Colors.grey[100],
-                            child: Book(quizBook: quizBook, scale: 0.8),
+                          child: Stack(
+                            children: [
+                              Container(
+                                color: Colors.brown[900],
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  width: 8,
+                                  color: Colors.brown[500],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  width: 8,
+                                  color: Colors.brown[500],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  height: 8,
+                                  color: Colors.brown[500],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: 8,
+                                  color: Colors.brown[500],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Card(
+                                  color: Colors.brown[100],
+                                  child: Book(quizBook: quizBook, scale: 0.8),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                     ],

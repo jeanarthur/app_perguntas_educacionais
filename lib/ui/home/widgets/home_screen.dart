@@ -19,67 +19,56 @@ class _MyHomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ListenableBuilder(
-              listenable: widget.viewModel, 
-              builder: (context, child) {
-                return HomeCurrentBook(viewModel: widget.viewModel);
-              }
-            ),
-            SizedBox(height: 100),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    context.go(Routes.quizBookList);
-                  },
-                  child: Column(
-                    children: [
-                      Icon(Icons.list_alt, size: 32)
-                    ],
-                  ),
-                ),
-                SizedBox(width: 20),
-                SizedBox(width: 20), 
-                OutlinedButton(
-                  onPressed: () {
-                    context.go(Routes.ranking);
-                  },
-                  child: Column(
-                    children: [
-                      Icon(Icons.emoji_events, size: 32),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text("Iniciar", style: TextStyle(fontSize: 24)),
-                )
-              ],
-            )
-          ],
+    return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bookshelf_background.png'),
+            fit: BoxFit.cover,
+            opacity: 0.5
+          )
         ),
-      ), 
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: NavigationBar(
+            backgroundColor: Colors.brown[300],
+            indicatorColor: Colors.brown[100],
+            selectedIndex: 1,
+            destinations: const <Widget>[
+              NavigationDestination(
+                icon: Icon(Icons.menu_book, color: Colors.black),
+                label: 'Temas'
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.home, color: Colors.black), 
+                label: 'Inicio'
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.emoji_events, color: Colors.black),
+                label: 'Classificação',
+              ),
+            ],
+            onDestinationSelected: (index) => {
+              context.go(<String>[Routes.quizBookList, Routes.home, Routes.ranking][index])
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: Colors.brown,
+            title: Text(widget.title, style: TextStyle(color: Colors.white),),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ListenableBuilder(
+                  listenable: widget.viewModel, 
+                  builder: (context, child) {
+                    return HomeCurrentBook(viewModel: widget.viewModel);
+                  }
+                ),
+              ],
+            ),
+          ), 
+        ),
     );
   }
 }

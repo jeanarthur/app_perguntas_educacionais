@@ -69,6 +69,7 @@ flutter:
     - assets/images/mathematics_quiz_cover.png
     - assets/images/english_quiz_cover.png
     - assets/images/geography_quiz_cover.png
+    - assets/images/bookshelf_background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

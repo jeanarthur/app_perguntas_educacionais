@@ -51,13 +51,13 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: 20.0),
+              margin: EdgeInsets.only(top: 12.0 * scale),
               // color: Colors.blue[100],
               width: 120 * scale,
               height: 25 * scale,
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Text(quizBook.title, style: TextStyle(fontSize: 12 * scale, color: Colors.white, fontWeight: FontWeight.bold),),
+                child: Text(quizBook.title, style: TextStyle(fontSize: 13 * scale, color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
           ),
@@ -69,7 +69,7 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(top: 35.0),
+              margin: EdgeInsets.only(top: 20.0 * scale),
               // color: Colors.blue[100],
               width: 120 * scale,
               height: 100 * scale,
