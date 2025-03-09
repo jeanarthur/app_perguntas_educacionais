@@ -1,4 +1,5 @@
 import 'package:app_perguntas_educacionais/routing/routes.dart';
+import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_current_book.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 
   final String title;
   
-  final dynamic viewModel;
+  final HomeViewModel viewModel;
   
   @override
   State<HomeScreen> createState() => _MyHomePageState();
@@ -39,7 +40,7 @@ class _MyHomePageState extends State<HomeScreen> {
               children: [
                 OutlinedButton(
                   onPressed: () {
-                    context.go(Routes.categories);
+                    context.go(Routes.quizBookList);
                   },
                   child: Column(
                     children: [

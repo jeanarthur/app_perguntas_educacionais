@@ -1,11 +1,11 @@
-import 'package:app_perguntas_educacionais/domain/models/category/category.dart';
+import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:flutter/material.dart';
 
 class Book extends StatelessWidget {
 
-  const Book({super.key, required this.category});
+  const Book({super.key, required this.quizBook});
 
-  final Category category;
+  final QuizBook quizBook;
   final double scale = 1.5;
 
   @override
@@ -19,7 +19,7 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: category.color[800],
+              color: quizBook.color[800],
               width: 147 * scale,
               height: 35 * scale,
             ),
@@ -40,7 +40,7 @@ class Book extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.all(10.0),
-          color: category.color,
+          color: quizBook.color,
           width: 150 * scale,
           height: 170 * scale,
         ),
@@ -57,7 +57,7 @@ class Book extends StatelessWidget {
               height: 25 * scale,
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Text(category.title, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),),
+                child: Text(quizBook.title, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
           ),
@@ -75,7 +75,7 @@ class Book extends StatelessWidget {
               height: 100 * scale,
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset(category.imagePath),
+                child: Image.asset(quizBook.imagePath),
               ),
             ),
           ),

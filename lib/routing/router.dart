@@ -1,6 +1,6 @@
 import 'package:app_perguntas_educacionais/routing/routes.dart';
-import 'package:app_perguntas_educacionais/ui/categories/view-models/categories_view_model.dart';
-import 'package:app_perguntas_educacionais/ui/categories/widgets/categories_screen.dart';
+import 'package:app_perguntas_educacionais/ui/quiz_book_list/view-models/quiz_book_list_view_model.dart';
+import 'package:app_perguntas_educacionais/ui/quiz_book_list/widgets/quiz_book_list_screen.dart';
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_screen.dart';
 import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_screen.dart';
@@ -14,18 +14,16 @@ GoRouter router() => GoRouter(
       path: Routes.home,
       builder: (context, state) {
         final viewModel = HomeViewModel(
-          categoriesRepository: context.read(),
-          selectedBookRepository: context.read()
+          quizBookRepository: context.read()
         );
         return HomeScreen(title: 'App Perguntas Educacionais', viewModel: viewModel);
       }
     ),
     GoRoute(
-      path: Routes.categories,
+      path: Routes.quizBookList,
       builder: (context, state) {
         final viewModel = CategoriesViewModel(
-          categoriesRepository: context.read(),
-          selectedBookRepository: context.read()
+          quizBookRepository: context.read()
         );
         return Questionaries(viewModel: viewModel);
       }

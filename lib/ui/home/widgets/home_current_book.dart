@@ -9,9 +9,12 @@ class HomeCurrentBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint("Render current selected quiz book: ${viewModel.selectedQuizBook.id} | ${viewModel.selectedQuizBook.title}");
+
     return Column(
       children: [
-        Book(category: viewModel.selectedBook),
+        Book(quizBook: viewModel.selectedQuizBook),
       ],
     );
   }

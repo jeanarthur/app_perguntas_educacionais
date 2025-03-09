@@ -1,13 +1,13 @@
-import 'package:app_perguntas_educacionais/domain/models/category/category.dart';
+import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:flutter/material.dart';
 
 class LocalDataService {
-  List<Category> getCategories() {
+  List<QuizBook> getQuizBookList() {
     return [
-      Category(id: 0, title: 'Matemática', color: Colors.blue),
-      Category(id: 1, title: 'Língua Portuguesa', imagePath: 'assets/images/portuguese_quiz_cover.png', color: Colors.red),
-      Category(id: 2, title: 'Inglês', color: Colors.orange),
-      Category(id: 3, title: 'Geografia', color: Colors.brown),
+      QuizBook(id: 0, title: 'Matemática', color: Colors.blue),
+      QuizBook(id: 1, title: 'Língua Portuguesa', imagePath: 'assets/images/portuguese_quiz_cover.png', color: Colors.red),
+      QuizBook(id: 2, title: 'Inglês', color: Colors.orange),
+      QuizBook(id: 3, title: 'Geografia', color: Colors.brown),
     ];
   }
 }

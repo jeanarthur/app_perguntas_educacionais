@@ -1,6 +1,6 @@
-import 'package:app_perguntas_educacionais/domain/models/category/category.dart';
+import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:app_perguntas_educacionais/routing/routes.dart';
-import 'package:app_perguntas_educacionais/ui/categories/view-models/categories_view_model.dart';
+import 'package:app_perguntas_educacionais/ui/quiz_book_list/view-models/quiz_book_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,7 +37,7 @@ class Questionaries extends StatelessWidget {
             builder: (context, child) {
               return ListView(
                 children: [
-                  for (Category category in viewModel.categories)
+                  for (QuizBook quizBook in viewModel.quizBookList)
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -45,11 +45,11 @@ class Questionaries extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: ListTile(title: Text(category.title)),
+                              child: ListTile(title: Text(quizBook.title)),
                             ),
                             OutlinedButton(
                               onPressed: () => {
-                                viewModel.selectBook(category.id),
+                                viewModel.selectBook(quizBook.id),
                                 context.go(Routes.home)
                               },
                               child: Text('Selecionar'),
