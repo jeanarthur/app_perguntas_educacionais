@@ -1,4 +1,3 @@
-import 'package:app_perguntas_educacionais/data/repositories/categories/categories_repository_local.dart';
 import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:app_perguntas_educacionais/ui/categories/view-models/categories_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/categories/widgets/categories_screen.dart';
@@ -14,7 +13,10 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.home,
       builder: (context, state) {
-        final viewModel = HomeViewModel();
+        final viewModel = HomeViewModel(
+          categoriesRepository: context.read(),
+          selectedBookRepository: context.read()
+        );
         return HomeScreen(title: 'App Perguntas Educacionais', viewModel: viewModel);
       }
     ),
@@ -22,7 +24,8 @@ GoRouter router() => GoRouter(
       path: Routes.categories,
       builder: (context, state) {
         final viewModel = CategoriesViewModel(
-          categoriesRepository: CategoriesRepositoryLocal(localDataService: context.read())
+          categoriesRepository: context.read(),
+          selectedBookRepository: context.read()
         );
         return Questionaries(viewModel: viewModel);
       }

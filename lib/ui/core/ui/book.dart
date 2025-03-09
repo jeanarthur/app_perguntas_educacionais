@@ -1,13 +1,12 @@
+import 'package:app_perguntas_educacionais/domain/models/category/category.dart';
 import 'package:flutter/material.dart';
 
 class Book extends StatelessWidget {
 
-  const Book({super.key, this.title = '[TITLE]', this.imagePath = 'assets/images/quiz_default.png'});
+  const Book({super.key, required this.category});
 
-  final dynamic title;
-  final dynamic imagePath;
-
-
+  final Category category;
+  final double scale = 1.5;
 
   @override
   Widget build(BuildContext context) {
@@ -15,68 +14,68 @@ class Book extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.all(10.0),
-          width: 130,
-          height: 165,
+          width: 150 * scale,
+          height: 185 * scale,
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: Colors.blue[800],
-              width: 127,
-              height: 15,
+              color: category.color[800],
+              width: 147 * scale,
+              height: 35 * scale,
             ),
           ),
         ),
         Container(
           margin: const EdgeInsets.all(10.0),
-          width: 130,
-          height: 158,
+          width: 150 * scale,
+          height: 178 * scale,
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               color: Colors.grey[300],
-              width: 110,
-              height: 8,
+              width: 130 * scale,
+              height: 28 * scale,
             ),
           ),
         ),
         Container(
           margin: const EdgeInsets.all(10.0),
-          color: Colors.blue,
-          width: 130,
-          height: 150,
+          color: category.color,
+          width: 150 * scale,
+          height: 170 * scale,
         ),
         Container(
           margin: const EdgeInsets.all(10.0),
-          width: 130,
-          height: 150,
+          width: 150 * scale,
+          height: 170 * scale,
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: 15.0),
-              color: Colors.blue[100],
-              width: 100,
-              height: 15,
+              margin: EdgeInsets.only(top: 20.0),
+              // color: Colors.blue[100],
+              width: 120 * scale,
+              height: 25 * scale,
               child: Align(
-                alignment: Alignment.center,
-                child: Text(title),
+                alignment: Alignment.topCenter,
+                child: Text(category.title, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
           ),
         ),
         Container(
           margin: const EdgeInsets.all(10.0),
-          width: 130,
-          height: 150,
+          width: 150 * scale,
+          height: 170 * scale,
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(top: 15.0),
-              color: Colors.blue[100],
-              width: 100,
-              height: 80,
+              margin: EdgeInsets.only(top: 35.0),
+              // color: Colors.blue[100],
+              width: 120 * scale,
+              height: 100 * scale,
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset(imagePath),
+                child: Image.asset(category.imagePath),
               ),
             ),
           ),

@@ -10,7 +10,6 @@ class HomeScreen extends StatefulWidget {
   
   final dynamic viewModel;
   
-
   @override
   State<HomeScreen> createState() => _MyHomePageState();
 }
@@ -28,7 +27,12 @@ class _MyHomePageState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            HomeCurrentBook(),
+            ListenableBuilder(
+              listenable: widget.viewModel, 
+              builder: (context, child) {
+                return HomeCurrentBook(viewModel: widget.viewModel);
+              }
+            ),
             SizedBox(height: 100),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

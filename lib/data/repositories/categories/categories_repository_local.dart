@@ -27,6 +27,4 @@ class CategoriesRepositoryLocal implements CategoriesRepository {
     return Future.value(Result.ok(_localDataService.getCategories()));
   }
 
-  
-
 }

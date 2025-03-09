@@ -1,18 +1,21 @@
 import 'dart:developer';
 
 import 'package:app_perguntas_educacionais/data/repositories/categories/categories_repository.dart';
+import 'package:app_perguntas_educacionais/data/repositories/selected_book/selected_book_repository.dart';
 import 'package:app_perguntas_educacionais/domain/models/category/category.dart';
 import 'package:app_perguntas_educacionais/utils/result.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesViewModel extends ChangeNotifier {
   CategoriesViewModel({
-    required this.categoriesRepository
+    required this.categoriesRepository,
+    required this.selectedBookRepository
   }) {
     load();
   }
 
   final CategoriesRepository categoriesRepository;
+  final SelectedBookRepository selectedBookRepository;
 
   List<Category> _categories = [];
 
@@ -33,6 +36,10 @@ class CategoriesViewModel extends ChangeNotifier {
       case Error():
         return;
     }
+  }
+
+  void selectBook(int id) async {
+    selectedBookRepository.setSelectedBook(id);
   }
 
 }

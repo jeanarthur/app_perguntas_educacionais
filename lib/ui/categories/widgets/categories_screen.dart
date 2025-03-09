@@ -48,7 +48,10 @@ class Questionaries extends StatelessWidget {
                               child: ListTile(title: Text(category.title)),
                             ),
                             OutlinedButton(
-                              onPressed: () => {},
+                              onPressed: () => {
+                                viewModel.selectBook(category.id),
+                                context.go(Routes.home)
+                              },
                               child: Text('Selecionar'),
                             ),
                           ],
