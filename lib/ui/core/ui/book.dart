@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class Book extends StatelessWidget {
 
-  const Book({super.key, required this.quizBook});
+  const Book({super.key, required this.quizBook, this.scale = 1.5});
 
   final QuizBook quizBook;
-  final double scale = 1.5;
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class Book extends StatelessWidget {
               height: 25 * scale,
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Text(quizBook.title, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),),
+                child: Text(quizBook.title, style: TextStyle(fontSize: 12 * scale, color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
           ),
