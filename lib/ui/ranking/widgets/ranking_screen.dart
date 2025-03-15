@@ -1,4 +1,6 @@
 import 'package:app_perguntas_educacionais/routing/routes.dart';
+import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_list.dart';
+import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_podium.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,33 +9,33 @@ class Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Classificação"),
-        leading: InkWell(
-          onTap: () {
-            context.go(Routes.home);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black54,
-          ),
-        )
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.brown[400]
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  Card(child: ListTile(title: Text('1º Lugar'))),
-                  Card(child: ListTile(title: Text('2ª Lugar'))),
-                  Card(child: ListTile(title: Text('3ª Lugar'))),
-                ],
-              ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.brown,
+          title: Text("Classificação"),
+          leading: InkWell(
+            onTap: () {
+              context.go(Routes.home);
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black54,
             ),
-          ],
+          )
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RankingPodium(),
+              RankingList(),
+            ],
+          ),
         ),
       ),
     );
