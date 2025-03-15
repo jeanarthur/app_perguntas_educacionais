@@ -1,9 +1,38 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-class RankingPodium extends StatelessWidget {
+class RankingPodium extends StatefulWidget {
   const RankingPodium({
     super.key,
   });
+
+  @override
+  State<RankingPodium> createState() => _RankingPodiumState();
+}
+
+class _RankingPodiumState extends State<RankingPodium> {
+
+  double _baseHeight = 0;
+  Color _firstColor = Colors.black;
+  Color _secondColor = Colors.black;
+  Color _thirdColor = Colors.black;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        log("Animation dispatch");
+        _baseHeight = 50;
+
+        _firstColor = Colors.amber;
+        _secondColor = Colors.grey;
+        _thirdColor = Colors.brown;
+
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +51,21 @@ class RankingPodium extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("450 Pts."),
-                  Container(
-                    color: Colors.grey,
-                    height: 150,
+                  TweenAnimationBuilder(
+                    tween: IntTween(
+                      begin: 0,
+                      end: 450
+                    ), 
+                    duration: Duration(milliseconds: 1500), 
+                    builder: (context, value, child) {
+                      return Text("$value Pts.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+                    }
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 1500),
+                    curve: Curves.fastOutSlowIn,
+                    color: _secondColor,
+                    height: 50 + _baseHeight * 2,
                     width: 100,
                     child: Padding(
                       padding: EdgeInsets.all(15),
@@ -51,10 +91,21 @@ class RankingPodium extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("900 Pts."),
-                  Container(
-                    color: Colors.amber,
-                    height: 200,
+                  TweenAnimationBuilder(
+                    tween: IntTween(
+                      begin: 0,
+                      end: 900
+                    ), 
+                    duration: Duration(milliseconds: 1500), 
+                    builder: (context, value, child) {
+                      return Text("$value Pts.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+                    }
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 1500),
+                    curve: Curves.fastOutSlowIn,
+                    color: _firstColor,
+                    height: 50 + _baseHeight * 3,
                     width: 100,
                     child: Padding(
                       padding: EdgeInsets.all(15),
@@ -80,10 +131,21 @@ class RankingPodium extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("300 Pts."),
-                  Container(
-                    color: Colors.brown,
-                    height: 100,
+                  TweenAnimationBuilder(
+                    tween: IntTween(
+                      begin: 0,
+                      end: 300
+                    ), 
+                    duration: Duration(milliseconds: 1500), 
+                    builder: (context, value, child) {
+                      return Text("$value Pts.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+                    }
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 1500),
+                    curve: Curves.fastOutSlowIn,
+                    color: _thirdColor,
+                    height: 50 + _baseHeight,
                     width: 100,
                     child: Padding(
                       padding: EdgeInsets.all(15),
