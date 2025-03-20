@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: providersLocal,
       child: MaterialApp.router(
-        title: 'Flutter Demo',
+        title: 'App Perguntas Educacionais',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
