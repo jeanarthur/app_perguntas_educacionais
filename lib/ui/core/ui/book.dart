@@ -10,6 +10,18 @@ class Book extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Color darkenColor(Color c, [int percent = 10]) {
+        assert(1 <= percent && percent <= 100);
+        var f = 1 - percent / 100;
+        return Color.from(
+            alpha: c.a,
+            red: (c.r * f),
+            green: (c.g  * f),
+            blue: (c.b * f)
+        );
+    }
+
     return Stack(
       children: [
         Container(
@@ -19,7 +31,7 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: quizBook.color[800],
+              color: darkenColor(quizBook.color, 40),
               width: 147 * scale,
               height: 35 * scale,
             ),
