@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: providersLocal,
+      child: const MyApp(),  
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,15 +16,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: providersLocal,
-      child: MaterialApp.router(
-        title: 'App Perguntas Educacionais',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        ),
-        routerConfig: router(),
-      ),  
+    return MaterialApp.router(
+      title: 'App Perguntas Educacionais',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      ),
+      routerConfig: router(),
     );
   }
 }

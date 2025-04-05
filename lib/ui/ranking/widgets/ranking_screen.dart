@@ -1,11 +1,25 @@
+import 'dart:developer';
+
 import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_list.dart';
 import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_podium.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class Ranking extends StatelessWidget {
+class Ranking extends StatefulWidget {
   const Ranking({super.key});
+
+  @override
+  State<Ranking> createState() => _RankingState();
+}
+
+class _RankingState extends State<Ranking> {
+
+  @override
+  void dispose() {
+    super.dispose();
+    log("[ranking_screen] Ranking screen disposed");
+  }
 
   @override
   Widget build(BuildContext context) {

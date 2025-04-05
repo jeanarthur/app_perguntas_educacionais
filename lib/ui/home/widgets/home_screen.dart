@@ -62,8 +62,13 @@ class _MyHomePageState extends State<HomeScreen> {
                 ListenableBuilder(
                   listenable: widget.viewModel, 
                   builder: (context, child) {
-                    return HomeCurrentBook(viewModel: widget.viewModel);
-                  }
+                    if (widget.viewModel.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    return child!;
+                  },
+                  child: HomeCurrentBook(viewModel: widget.viewModel),
                 ),
               ],
             ),

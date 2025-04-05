@@ -19,14 +19,14 @@ class CategoriesViewModel extends ChangeNotifier {
   List<QuizBook> get quizBookList => _quizBookList;
 
   void load() async {
-    log("Load quizBookList");
+    log("[quiz_book_list_view_model] Load quizBookList");
     final result = await quizBookRepository.getQuizBookList();
     switch (result) {
       case Ok():
-      log("quizBookList loaded: ${result.value}");
+      log("[quiz_book_list_view_model] quizBookList loaded: ${result.value}");
       _quizBookList = result.value;
       for (QuizBook category in _quizBookList) {
-        log("Category: id = ${category.id}, title = ${category.title}, imagePath = ${category.imagePath}");
+        log("[quiz_book_list_view_model] Category: id = ${category.id}, title = ${category.title}, imagePath = ${category.imagePath}");
       }
       notifyListeners();
 

@@ -4,6 +4,7 @@ import 'package:app_perguntas_educacionais/ui/quiz_book_list/widgets/quiz_book_l
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_screen.dart';
 import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -12,27 +13,43 @@ GoRouter router() => GoRouter(
   routes: [
     GoRoute(
       path: Routes.home,
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final viewModel = HomeViewModel(
           quizBookRepository: context.read()
         );
-        return HomeScreen(title: 'App Perguntas Educacionais', viewModel: viewModel);
+        return simpleTransition(HomeScreen(title: 'App Perguntas Educacionais', viewModel: viewModel));
       }
     ),
     GoRoute(
       path: Routes.quizBookList,
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final viewModel = CategoriesViewModel(
           quizBookRepository: context.read()
         );
-        return Questionaries(viewModel: viewModel);
+        return simpleTransition(Questionaries(viewModel: viewModel));
       }
     ),
     GoRoute(
       path: Routes.ranking,
-      builder: (context, state) {
-        return Ranking();
+      pageBuilder: (context, state) {
+        return simpleTransition(Ranking());
       }
     )
   ]
 );
+
+CustomTransitionPage<dynamic> simpleTransition(Widget child) {
+  return CustomTransitionPage(
+    child: child, 
+    transitionsBuilder: (BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    }
+  );
+}
+
