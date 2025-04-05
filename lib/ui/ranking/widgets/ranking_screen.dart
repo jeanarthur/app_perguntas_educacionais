@@ -23,32 +23,38 @@ class _RankingState extends State<Ranking> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.brown[400]
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.brown,
-          title: Text("Classificação"),
-          leading: InkWell(
-            onTap: () {
-              context.go(Routes.home);
-            },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black54,
-            ),
-          )
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, r) {
+        if (!didPop) context.go(Routes.home);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.brown[400]
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RankingPodium(),
-              RankingList(),
-            ],
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.brown,
+            title: Text("Classificação"),
+            leading: InkWell(
+              onTap: () {
+                context.go(Routes.home);
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black54,
+              ),
+            )
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RankingPodium(),
+                RankingList(),
+              ],
+            ),
           ),
         ),
       ),

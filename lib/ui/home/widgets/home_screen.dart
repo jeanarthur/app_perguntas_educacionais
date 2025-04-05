@@ -19,61 +19,67 @@ class _MyHomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bookshelf_background.png'),
-            fit: BoxFit.cover,
-            opacity: 0.5
-          )
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          bottomNavigationBar: NavigationBar(
-            backgroundColor: Colors.brown[300],
-            indicatorColor: Colors.brown[100],
-            selectedIndex: 1,
-            destinations: const <Widget>[
-              NavigationDestination(
-                icon: Icon(Icons.menu_book, color: Colors.black),
-                label: 'Temas'
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.home, color: Colors.black), 
-                label: 'Inicio'
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.emoji_events, color: Colors.black),
-                label: 'Classificação',
-              ),
-            ],
-            onDestinationSelected: (index) => {
-              context.go(<String>[Routes.quizBookList, Routes.home, Routes.ranking][index])
-            },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, r) {
+        if (!didPop) context.go(Routes.home);
+      },
+      child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/bookshelf_background.png'),
+              fit: BoxFit.cover,
+              opacity: 0.5
+            )
           ),
-          appBar: AppBar(
-            backgroundColor: Colors.brown,
-            title: Text(widget.title, style: TextStyle(color: Colors.white),),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ListenableBuilder(
-                  listenable: widget.viewModel, 
-                  builder: (context, child) {
-                    if (widget.viewModel.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    return child!;
-                  },
-                  child: HomeCurrentBook(viewModel: widget.viewModel),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            bottomNavigationBar: NavigationBar(
+              backgroundColor: Colors.brown[300],
+              indicatorColor: Colors.brown[100],
+              selectedIndex: 1,
+              destinations: const <Widget>[
+                NavigationDestination(
+                  icon: Icon(Icons.menu_book, color: Colors.black),
+                  label: 'Temas'
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.home, color: Colors.black), 
+                  label: 'Inicio'
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.emoji_events, color: Colors.black),
+                  label: 'Classificação',
                 ),
               ],
+              onDestinationSelected: (index) => {
+                context.go(<String>[Routes.quizBookList, Routes.home, Routes.ranking][index])
+              },
             ),
-          ), 
-        ),
+            appBar: AppBar(
+              backgroundColor: Colors.brown,
+              title: Text(widget.title, style: TextStyle(color: Colors.white),),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ListenableBuilder(
+                    listenable: widget.viewModel, 
+                    builder: (context, child) {
+                      if (widget.viewModel.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+      
+                      return child!;
+                    },
+                    child: HomeCurrentBook(viewModel: widget.viewModel),
+                  ),
+                ],
+              ),
+            ), 
+          ),
+      ),
     );
   }
 }
