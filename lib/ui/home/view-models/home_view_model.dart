@@ -26,7 +26,7 @@ class HomeViewModel extends ChangeNotifier {
     switch (result) {
       case Ok():
         _selectedQuizBook = result.value;
-        log('[home_view_model] Selected quiz book: ${selectedQuizBook.id} | ${selectedQuizBook.title}');
+        log('[home_view_model] Selected quiz book: ${selectedQuizBook.id} | ${selectedQuizBook.title} | ${selectedQuizBook.icon}');
         notifyListeners();
       case Error():
         log('[home_view_model] Error on get selected quiz book: ${result.error}');

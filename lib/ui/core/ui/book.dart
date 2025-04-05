@@ -11,17 +11,6 @@ class Book extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Color darkenColor(Color c, [int percent = 10]) {
-        assert(1 <= percent && percent <= 100);
-        var f = 1 - percent / 100;
-        return Color.from(
-            alpha: c.a,
-            red: (c.r * f),
-            green: (c.g  * f),
-            blue: (c.b * f)
-        );
-    }
-
     return Stack(
       children: [
         Container(
@@ -31,7 +20,7 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: darkenColor(quizBook.color, 40),
+              color: Color.lerp(quizBook.color, Colors.black, 0.4),
               width: 147 * scale,
               height: 35 * scale,
             ),
@@ -87,7 +76,20 @@ class Book extends StatelessWidget {
               height: 100 * scale,
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset(quizBook.imagePath),
+                child: Stack(
+                  children: [
+                    Container(
+                      color: Color.lerp(quizBook.color, Colors.white, 0.6),
+                    ),
+                    Center(
+                      child: Icon(
+                        quizBook.icon, 
+                        size: 100 * scale,
+                        color: Color.lerp(quizBook.color, Colors.black, 0.3)
+                      )
+                    )
+                  ],
+                ),
               ),
             ),
           ),

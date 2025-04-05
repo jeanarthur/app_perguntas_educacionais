@@ -26,7 +26,7 @@ class CategoriesViewModel extends ChangeNotifier {
       log("[quiz_book_list_view_model] quizBookList loaded: ${result.value}");
       _quizBookList = result.value;
       for (QuizBook category in _quizBookList) {
-        log("[quiz_book_list_view_model] Category: id = ${category.id}, title = ${category.title}, imagePath = ${category.imagePath}");
+        log("[quiz_book_list_view_model] Category: id = ${category.id}, title = ${category.title}, icon = ${category.icon}");
       }
       notifyListeners();
 
