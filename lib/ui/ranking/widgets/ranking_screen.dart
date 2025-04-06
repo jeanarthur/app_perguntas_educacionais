@@ -36,7 +36,7 @@ class _RankingState extends State<Ranking> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.brown,
-            title: Text("Classificação"),
+            title: Text("Classificação", style: TextStyle(color: Colors.grey[200])),
             leading: InkWell(
               onTap: () {
                 context.go(Routes.home);
