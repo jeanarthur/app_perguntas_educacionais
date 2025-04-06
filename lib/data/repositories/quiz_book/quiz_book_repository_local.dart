@@ -13,8 +13,8 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
   QuizBook? get selectedQuizBook => _selectedQuizBook;
 
   @override
-  Future<Result<QuizBook>> getQuizBook(int id) {
-    final quizBookList = _localDataService.getQuizBookList();
+  Future<Result<QuizBook>> getQuizBook(int id) async {
+    final quizBookList = await _localDataService.getQuizBookList();
     final quizBook = quizBookList.where((quizBook) => quizBook.id == id).firstOrNull;
 
     if (quizBook != null) {
@@ -25,8 +25,8 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
   }
 
   @override
-  Future<Result<List<QuizBook>>> getQuizBookList() {
-    return Future.value(Result.ok(_localDataService.getQuizBookList()));
+  Future<Result<List<QuizBook>>> getQuizBookList() async {
+    return Future.value(Result.ok(await _localDataService.getQuizBookList()));
   }
 
   @override
