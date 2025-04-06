@@ -49,7 +49,7 @@ class _QuizBookFormState extends State<QuizBookForm> {
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.grey
                   ),
-                  child: Text("Criar", style: TextStyle(fontSize: 26)),
+                  child: Text("Salvar", style: TextStyle(fontSize: 26)),
                 )
               ],
             ),

@@ -17,6 +17,7 @@ class Questionaries extends StatefulWidget {
 
 class _QuestionariesState extends State<Questionaries> {
   var _index = 0;
+  var _selectedQuizBook = null;
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +44,10 @@ class _QuestionariesState extends State<Questionaries> {
               icon: Icon(Icons.add_circle, color: Colors.black),
               label: 'Adicionar'
             ),
-            // NavigationDestination(
-            //   icon: Icon(Icons.change_circle, color: Colors.black),
-            //   label: 'Editar'
-            // ),
+            NavigationDestination(
+              icon: Icon(Icons.change_circle, color: Colors.black),
+              label: 'Editar'
+            ),
             // NavigationDestination(
             //   icon: Icon(Icons.remove_circle, color: Colors.black),
             //   label: 'Remover'
@@ -56,6 +57,7 @@ class _QuestionariesState extends State<Questionaries> {
             if (value != _index) {
               setState(() {
                 _index = value;
+                _selectedQuizBook = null;
               })
             }
           },
@@ -76,7 +78,13 @@ class _QuestionariesState extends State<Questionaries> {
         body: Builder(
           builder: (context) {
             switch (_index) {
-              case 0: return QuizBookList(widget: widget);
+              case 0: return QuizBookList(
+                widget: widget,
+                selectBookCallback: (quizBook) => {
+                  widget.viewModel.selectBook(quizBook.id),
+                  context.go(Routes.home)
+                }
+              );
               case 1: return QuizBookForm(
                 parent: widget, 
                 quizBook: QuizBook(id: -1, title: "", icon: Icons.question_mark_outlined, color: Color.fromARGB(255, 88, 88, 88)),
@@ -86,7 +94,29 @@ class _QuestionariesState extends State<Questionaries> {
                   })
                 },
               );
-              default: return QuizBookList(widget: widget);
+              case 2: return _selectedQuizBook == null ? QuizBookList(
+                widget: widget,
+                selectBookCallback: (quizBook) {
+                  setState(() {
+                    _selectedQuizBook = quizBook;
+                  });
+                }
+              ) : QuizBookForm(
+                parent: widget, 
+                quizBook: _selectedQuizBook,
+                createCallback: () => {
+                  setState(() {
+                    _index = 0;
+                  })
+                },
+              );
+              default: return QuizBookList(
+                widget: widget,
+                selectBookCallback: (quizBook) => {
+                  widget.viewModel.selectBook(quizBook.id),
+                  context.go(Routes.home)
+                }
+              );
             }
           }
         ),
@@ -99,9 +129,11 @@ class QuizBookList extends StatelessWidget {
   const QuizBookList({
     super.key,
     required this.widget,
+    required this.selectBookCallback
   });
 
   final Questionaries widget;
+  final Function selectBookCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +151,7 @@ class QuizBookList extends StatelessWidget {
                     for (QuizBook quizBook in widget.viewModel.quizBookList)
                       InkWell(
                         onTap: () => {
-                          widget.viewModel.selectBook(quizBook.id),
-                          context.go(Routes.home)
+                          selectBookCallback(quizBook)
                         },
                         child: Stack(
                           children: [
