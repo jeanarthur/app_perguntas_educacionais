@@ -1,6 +1,7 @@
 import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_current_book.dart';
+import 'package:app_perguntas_educacionais/ui/home/widgets/home_undefined_book.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -68,7 +69,7 @@ class _MyHomePageState extends State<HomeScreen> {
                     listenable: widget.viewModel, 
                     builder: (context, child) {
                       if (widget.viewModel.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const HomeUndefinedBook();
                       }
       
                       return child!;

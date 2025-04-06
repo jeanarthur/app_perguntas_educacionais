@@ -30,6 +30,15 @@ GoRouter router() => GoRouter(
       }
     ),
     GoRoute(
+      path: Routes.quizBookForm,
+      pageBuilder: (context, state) {
+        final viewModel = CategoriesViewModel(
+          quizBookRepository: context.read()
+        );
+        return simpleTransition(Questionaries(viewModel: viewModel, index: 1));
+      }
+    ),
+    GoRoute(
       path: Routes.ranking,
       pageBuilder: (context, state) {
         return simpleTransition(Ranking());

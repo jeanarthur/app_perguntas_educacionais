@@ -7,17 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class Questionaries extends StatefulWidget {
-  const Questionaries({super.key, required this.viewModel});
+  const Questionaries({super.key, required this.viewModel, this.index});
 
   final CategoriesViewModel viewModel;
+  final int? index;
 
   @override
   State<Questionaries> createState() => _QuestionariesState();
 }
 
 class _QuestionariesState extends State<Questionaries> {
-  var _index = 0;
+  int _index = 0;
   var _selectedQuizBook = null;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.index ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
