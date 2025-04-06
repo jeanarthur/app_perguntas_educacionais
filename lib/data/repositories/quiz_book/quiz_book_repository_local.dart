@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_perguntas_educacionais/data/repositories/quiz_book/quiz_book_repository.dart';
 import 'package:app_perguntas_educacionais/data/services/local/local_data_service.dart';
 import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
@@ -31,6 +33,7 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
 
   @override
   Future<Result<QuizBook>> getSelectedQuizBook() async {
+    log("[QuizBookRepositoryLocal] [getSelectedQuizBook] initialSelectedQuizBook: ${_selectedQuizBook.toString()}");
     if (_selectedQuizBook == null) {
       var resultFallback = await getQuizBookList();
         switch (resultFallback) {
@@ -62,6 +65,19 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
       return Future.value(Result.ok(null));
     } else {
       return Future.value(Result.error('Error on create quiz book' as Exception));
+    }
+  }
+  
+  @override
+  Future<Result<void>> deleteQuizBook(int id) async {
+    var result = await _localDataService.deleteQuizBook(id);
+    if (result != null) {
+      if (_selectedQuizBook?.id == id) {
+        _selectedQuizBook = null;
+      }
+      return Future.value(Result.ok(null));
+    } else {
+      return Future.value(Result.error(Exception('Error on delete quiz book')));
     }
   }
 }

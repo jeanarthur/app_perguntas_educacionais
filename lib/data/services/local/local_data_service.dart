@@ -54,7 +54,24 @@ class LocalDataService {
       log("[LocalDataService] [createQuizBook] created quiz book ${quizBook.title}");
       return quizBook.id;
     } on Exception catch (e) {
-      log("[LocalDataService] [createQuizBook] error on created quiz book [$e]");
+      log("[LocalDataService] [createQuizBook] error on create quiz book [$e]");
+      return null;
+    }
+  }
+
+  Future<int?> deleteQuizBook(int quizBookId) async {
+    final db = await database;
+
+    try {
+      int rows = await db.delete(
+        'quiz_books',
+        where: 'id = ?',
+        whereArgs: [quizBookId],
+      );
+      log("[LocalDataService] [deleteQuizBook] deleted quiz book [rows affected: $rows]");
+      return rows;
+    } on Exception catch (e) {
+      log("[LocalDataService] [deleteQuizBook] error on delete quiz book [$e]");
       return null;
     }
   }

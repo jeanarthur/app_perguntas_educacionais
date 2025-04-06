@@ -48,10 +48,10 @@ class _QuestionariesState extends State<Questionaries> {
               icon: Icon(Icons.change_circle, color: Colors.black),
               label: 'Editar'
             ),
-            // NavigationDestination(
-            //   icon: Icon(Icons.remove_circle, color: Colors.black),
-            //   label: 'Remover'
-            // ),
+            NavigationDestination(
+              icon: Icon(Icons.remove_circle, color: Colors.black),
+              label: 'Remover'
+            ),
           ],
           onDestinationSelected: (value) => {
             if (value != _index) {
@@ -109,6 +109,34 @@ class _QuestionariesState extends State<Questionaries> {
                     _index = 0;
                   })
                 },
+              );
+              case 3: return QuizBookList(
+                widget: widget,
+                selectBookCallback: (quizBook) {
+                  showDialog(
+                    context: context, 
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text("Excluir ${quizBook.title}?"), 
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              widget.viewModel.deleteBook(quizBook.id);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Confirmar'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                        ],
+                      );
+                    }
+                  );
+                }
               );
               default: return QuizBookList(
                 widget: widget,
