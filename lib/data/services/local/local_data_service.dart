@@ -31,8 +31,18 @@ class LocalDataService {
     ];
   }
 
-  Future<void> createQuizBook(QuizBook quizBook) async {
+  Future<int?> createQuizBook(QuizBook quizBook) async {
     final db = await database;
+
+    if (quizBook.id == -1) {
+      var result = await db.query('quiz_books', columns: ['id'], orderBy: "id desc", limit: 1);
+      if (result.isNotEmpty){
+        int lastUsedId = result.first['id'] as int;
+        quizBook.id = lastUsedId + 1;
+      } else {
+        quizBook.id = 0;
+      }
+    }
 
     log("[LocalDataService] [createQuizBook] creating ${quizBook.toString()}");
     try {
@@ -42,8 +52,10 @@ class LocalDataService {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       log("[LocalDataService] [createQuizBook] created quiz book ${quizBook.title}");
+      return quizBook.id;
     } on Exception catch (e) {
       log("[LocalDataService] [createQuizBook] error on created quiz book [$e]");
+      return null;
     }
   }
 }

@@ -54,4 +54,14 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
         return Result.error(result.error);
     }
   }
+  
+  @override
+  Future<Result<void>> createQuizBook(QuizBook quizBook) async {
+    var result = await _localDataService.createQuizBook(quizBook);
+    if (result != null) {
+      return Future.value(Result.ok(null));
+    } else {
+      return Future.value(Result.error('Error on create quiz book' as Exception));
+    }
+  }
 }

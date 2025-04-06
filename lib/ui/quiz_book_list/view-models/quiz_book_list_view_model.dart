@@ -20,6 +20,20 @@ class CategoriesViewModel extends ChangeNotifier {
 
   void load() async {
     log("[quiz_book_list_view_model] Load quizBookList");
+    refreshList();
+  }
+
+  void selectBook(int id) async {
+    quizBookRepository.setSelectedQuizBook(id);
+  }
+
+  void createBook(QuizBook quizBook) async {
+    log("[CategoriesViewModel] [createBook] creating quiz book...");
+    await quizBookRepository.createQuizBook(quizBook);
+    refreshList();
+  }
+
+  void refreshList() async {
     final result = await quizBookRepository.getQuizBookList();
     switch (result) {
       case Ok():
@@ -33,10 +47,6 @@ class CategoriesViewModel extends ChangeNotifier {
       case Error():
         return;
     }
-  }
-
-  void selectBook(int id) async {
-    quizBookRepository.setSelectedQuizBook(id);
   }
 
 }
