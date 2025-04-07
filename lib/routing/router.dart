@@ -1,4 +1,5 @@
 import 'package:app_perguntas_educacionais/routing/routes.dart';
+import 'package:app_perguntas_educacionais/ui/profile/widgets/profile_screen.dart';
 import 'package:app_perguntas_educacionais/ui/quiz_book_list/view-models/quiz_book_list_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/quiz_book_list/widgets/quiz_book_list_screen.dart';
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
@@ -42,6 +43,12 @@ GoRouter router() => GoRouter(
       path: Routes.ranking,
       pageBuilder: (context, state) {
         return simpleTransition(Ranking());
+      }
+    ),
+    GoRoute(
+      path: Routes.profile,
+      pageBuilder: (context, state) {
+        return simpleTransition(ProfileScreen());
       }
     )
   ]
