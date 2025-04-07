@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_current_book.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_undefined_book.dart';
+import 'package:app_perguntas_educacionais/utils/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,6 +65,9 @@ class _MyHomePageState extends State<HomeScreen> {
               title: Text(widget.title, style: TextStyle(color: Colors.white),),
               actions: [
                 InkWell(
+                  onTap: () => {
+                    context.go(Routes.profile)
+                  },
                   child: Container(
                     height: 40,
                     width: 40,
@@ -71,7 +77,18 @@ class _MyHomePageState extends State<HomeScreen> {
                     ),
                     child: Align(
                       alignment: Alignment.center,
-                      child: Image.network('https://avatar.iran.liara.run/public'),
+                      child: FutureBuilder<Uint8List>(
+                          future: ProfilePicture.getProfilePicture(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return Image.memory(snapshot.data!);
+                            }
+                          },
+                        ),
                     ),
                   ),
                 )
