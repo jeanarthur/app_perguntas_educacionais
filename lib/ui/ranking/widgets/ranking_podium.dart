@@ -23,7 +23,7 @@ class _RankingPodiumState extends State<RankingPodium> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        log("Animation dispatch");
+        log("[ranking_podium] Animation dispatch");
         _baseHeight = 50;
 
         _firstColor = Colors.amber;

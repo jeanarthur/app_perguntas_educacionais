@@ -10,7 +10,7 @@ class HomeCurrentBook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint("Render current selected quiz book: ${viewModel.selectedQuizBook.id} | ${viewModel.selectedQuizBook.title}");
+    debugPrint("Render current selected quiz book: ${viewModel.selectedQuizBook.id} | ${viewModel.selectedQuizBook.title} | ${viewModel.selectedQuizBook.icon}");
 
     Color getComplementaryColor(Color color) {
       int red = (color.r * 255).toInt();

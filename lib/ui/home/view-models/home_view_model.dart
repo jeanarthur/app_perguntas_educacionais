@@ -13,20 +13,23 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   QuizBook _selectedQuizBook = QuizBook(id: 0);
+  bool _isLoading = true;
 
   final QuizBookRepository quizBookRepository;
 
   QuizBook get selectedQuizBook => _selectedQuizBook;
+  bool get isLoading => _isLoading;
 
   void load() async {
     var result = await quizBookRepository.getSelectedQuizBook();
+    _isLoading = false;
     switch (result) {
       case Ok():
         _selectedQuizBook = result.value;
-        log('Selected quiz book: ${selectedQuizBook.id} | ${selectedQuizBook.title}');
+        log('[home_view_model] Selected quiz book: ${selectedQuizBook.id} | ${selectedQuizBook.title} | ${selectedQuizBook.icon}');
         notifyListeners();
       case Error():
-        log('Error on get selected quiz book: ${result.error}');
+        log('[home_view_model] Error on get selected quiz book: ${result.error}');
         return;
     }
   }

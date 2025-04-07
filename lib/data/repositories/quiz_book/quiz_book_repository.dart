@@ -6,4 +6,7 @@ abstract class QuizBookRepository {
   Future<Result<QuizBook>> getQuizBook(int id);
   Future<Result<QuizBook>> getSelectedQuizBook();
   Future<Result<void>> setSelectedQuizBook(int id);
+  Future<Result<void>> createQuizBook(QuizBook quizBook);
+  Future<Result<void>> updateQuizBook(QuizBook quizBook);
+  Future<Result<void>> deleteQuizBook(int id);
 }

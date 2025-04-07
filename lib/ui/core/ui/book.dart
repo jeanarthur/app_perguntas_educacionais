@@ -10,6 +10,7 @@ class Book extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Stack(
       children: [
         Container(
@@ -19,7 +20,7 @@ class Book extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: quizBook.color[800],
+              color: Color.lerp(quizBook.color, Colors.black, 0.4),
               width: 147 * scale,
               height: 35 * scale,
             ),
@@ -75,7 +76,20 @@ class Book extends StatelessWidget {
               height: 100 * scale,
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset(quizBook.imagePath),
+                child: Stack(
+                  children: [
+                    Container(
+                      color: Color.lerp(quizBook.color, Colors.white, 0.6),
+                    ),
+                    Center(
+                      child: Icon(
+                        quizBook.icon, 
+                        size: 100 * scale,
+                        color: Color.lerp(quizBook.color, Colors.black, 0.3)
+                      )
+                    )
+                  ],
+                ),
               ),
             ),
           ),

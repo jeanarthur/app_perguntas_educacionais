@@ -19,24 +19,46 @@ class CategoriesViewModel extends ChangeNotifier {
   List<QuizBook> get quizBookList => _quizBookList;
 
   void load() async {
-    log("Load quizBookList");
+    log("[quiz_book_list_view_model] Load quizBookList");
+    refreshList();
+  }
+
+  void selectBook(int id) async {
+    quizBookRepository.setSelectedQuizBook(id);
+  }
+
+  void createBook(QuizBook quizBook) async {
+    log("[CategoriesViewModel] [createBook] creating quiz book...");
+    await quizBookRepository.createQuizBook(quizBook);
+    refreshList();
+  }
+
+  void updateBook(QuizBook quizBook) async {
+    log("[CategoriesViewModel] [createBook] creating quiz book...");
+    await quizBookRepository.updateQuizBook(quizBook);
+    refreshList();
+  }
+
+  void deleteBook(int id) async {
+    log("[CategoriesViewModel] [deleteBook] deleting quiz book...");
+    await quizBookRepository.deleteQuizBook(id);
+    refreshList();
+  }
+
+  void refreshList() async {
     final result = await quizBookRepository.getQuizBookList();
     switch (result) {
       case Ok():
-      log("quizBookList loaded: ${result.value}");
+      log("[quiz_book_list_view_model] quizBookList loaded: ${result.value}");
       _quizBookList = result.value;
       for (QuizBook category in _quizBookList) {
-        log("Category: id = ${category.id}, title = ${category.title}, imagePath = ${category.imagePath}");
+        log("[quiz_book_list_view_model] Category: id = ${category.id}, title = ${category.title}, icon = ${category.icon}");
       }
       notifyListeners();
 
       case Error():
         return;
     }
-  }
-
-  void selectBook(int id) async {
-    quizBookRepository.setSelectedQuizBook(id);
   }
 
 }
