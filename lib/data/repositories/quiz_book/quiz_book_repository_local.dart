@@ -80,4 +80,17 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
       return Future.value(Result.error(Exception('Error on delete quiz book')));
     }
   }
+  
+  @override
+  Future<Result<void>> updateQuizBook(QuizBook quizBook) async {
+    var result = await _localDataService.updateQuizBook(quizBook);
+    if (result != null) {
+      if (_selectedQuizBook?.id == quizBook.id) {
+        _selectedQuizBook = quizBook;
+      }
+      return Future.value(Result.ok(null));
+    } else {
+      return Future.value(Result.error(Exception('Error on delete quiz book')));
+    }
+  }
 }

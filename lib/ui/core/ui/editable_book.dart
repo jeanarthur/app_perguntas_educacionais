@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -24,7 +26,7 @@ class _EditableBookState extends State<EditableBook> {
   @override
   void initState() {
     super.initState();
-    quizBook = widget.quizBook;
+    quizBook = QuizBook.copyOf(widget.quizBook);
     _controller = TextEditingController(text: quizBook.title != "" ? quizBook.title : null);
   }
 
@@ -52,9 +54,17 @@ class _EditableBookState extends State<EditableBook> {
     _icon = icon?.data;
     setState(() {
       quizBook.icon = _icon!;
+      _notifyParent();
     });
 
     debugPrint('Picked Icon:  $icon');
+  }
+
+  _notifyParent() {
+    bool isValid = quizBook.title != "";
+    bool isChanged = !quizBook.areEqualTo(widget.quizBook);
+    log("[EditableBook] [_notifyParent] isValid: $isValid | isChanged: $isChanged");
+    widget.isValidCallback(isValid, isChanged, quizBook);
   }
 
   @override
@@ -68,7 +78,7 @@ class _EditableBookState extends State<EditableBook> {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              color: Color.lerp(widget.quizBook.color, Colors.black, 0.4),
+              color: Color.lerp(quizBook.color, Colors.black, 0.4),
               width: 147 * widget.scale,
               height: 35 * widget.scale,
             ),
@@ -127,6 +137,7 @@ class _EditableBookState extends State<EditableBook> {
                       setState(() {
                         currentColor = pickerColor;
                         quizBook.color = currentColor;
+                        _notifyParent();
                       });
                       Navigator.of(context).pop();
                     },
@@ -137,7 +148,7 @@ class _EditableBookState extends State<EditableBook> {
           },
           child: Container(
             margin: const EdgeInsets.all(10.0),
-            color: widget.quizBook.color,
+            color: quizBook.color,
             width: 150 * widget.scale,
             height: 170 * widget.scale,
           ),
@@ -168,7 +179,7 @@ class _EditableBookState extends State<EditableBook> {
                   onChanged: (value) => {
                     setState(() {
                       quizBook.title = value;
-                      widget.isValidCallback(quizBook.title != "");
+                      _notifyParent();
                     })
                   }
                 ),
@@ -193,13 +204,13 @@ class _EditableBookState extends State<EditableBook> {
                   child: Stack(
                     children: [
                       Container(
-                        color: Color.lerp(widget.quizBook.color, Colors.white, 0.6),
+                        color: Color.lerp(quizBook.color, Colors.white, 0.6),
                       ),
                       Center(
                         child: Icon(
-                          widget.quizBook.icon, 
+                          quizBook.icon, 
                           size: 100 * widget.scale,
-                          color: Color.lerp(widget.quizBook.color, Colors.black, 0.3)
+                          color: Color.lerp(quizBook.color, Colors.black, 0.3)
                         )
                       )
                     ],

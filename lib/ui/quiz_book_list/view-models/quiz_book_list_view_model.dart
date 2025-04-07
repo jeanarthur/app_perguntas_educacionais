@@ -33,6 +33,12 @@ class CategoriesViewModel extends ChangeNotifier {
     refreshList();
   }
 
+  void updateBook(QuizBook quizBook) async {
+    log("[CategoriesViewModel] [createBook] creating quiz book...");
+    await quizBookRepository.updateQuizBook(quizBook);
+    refreshList();
+  }
+
   void deleteBook(int id) async {
     log("[CategoriesViewModel] [deleteBook] deleting quiz book...");
     await quizBookRepository.deleteQuizBook(id);

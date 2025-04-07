@@ -4,11 +4,13 @@ import 'package:app_perguntas_educacionais/ui/quiz_book_list/widgets/quiz_book_l
 import 'package:flutter/material.dart';
 
 class QuizBookForm extends StatefulWidget {
-  const QuizBookForm({super.key, required this.parent,required this.quizBook, required this.createCallback});
+  const QuizBookForm({super.key, required this.parent,required this.quizBook, required this.createCallback, this.isEditMode = false});
 
   final QuizBook quizBook;
   final Questionaries parent;
   final Function createCallback;
+  
+  final bool isEditMode;
 
   @override
   State<QuizBookForm> createState() => _QuizBookFormState();
@@ -16,6 +18,8 @@ class QuizBookForm extends StatefulWidget {
 
 class _QuizBookFormState extends State<QuizBookForm> {
   bool _isValid = false;
+  bool _isChanged = false;
+  var _editedQuizBook = null;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +34,23 @@ class _QuizBookFormState extends State<QuizBookForm> {
                   child: EditableBook(
                     quizBook: widget.quizBook, 
                     scale: 2, 
-                    isValidCallback: (isValid) => {
+                    isValidCallback: (isValid, isChanged, editedQuizBook) => {
                       setState(() {
                         _isValid = isValid;
+                        _isChanged = isChanged;
+                        _editedQuizBook = editedQuizBook;
                       })
                     }),
                 ),
                 SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: _isValid ? () {
-                    widget.parent.viewModel.createBook(widget.quizBook);
+                  onPressed: _editedQuizBook != null && ((!widget.isEditMode && _isValid) || (widget.isEditMode && _isChanged)) ? () {
+                    if (widget.isEditMode) {
+                      widget.parent.viewModel.updateBook(_editedQuizBook);
+                    } else {
+                      widget.parent.viewModel.createBook(_editedQuizBook);
+                    }
+
                     widget.createCallback();
                   } : null,
                   style: ElevatedButton.styleFrom(

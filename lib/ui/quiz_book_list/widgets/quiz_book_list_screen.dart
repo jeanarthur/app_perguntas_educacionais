@@ -116,6 +116,7 @@ class _QuestionariesState extends State<Questionaries> {
                     _index = 0;
                   })
                 },
+                isEditMode: true,
               );
               case 3: return QuizBookList(
                 widget: widget,

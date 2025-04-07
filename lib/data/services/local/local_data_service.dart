@@ -59,6 +59,25 @@ class LocalDataService {
     }
   }
 
+  Future<int?> updateQuizBook(QuizBook quizBook) async {
+    final db = await database;
+
+    log("[LocalDataService] [updateQuizBook] updating ${quizBook.toString()}");
+    try {
+      int rows = await db.update(
+        'quiz_books',
+        quizBook.toMap(),
+        where: 'id = ?',
+        whereArgs: [quizBook.id],
+      );
+      log("[LocalDataService] [updateQuizBook] updated quiz book [rows affected: $rows]");
+      return quizBook.id;
+    } on Exception catch (e) {
+      log("[LocalDataService] [updateQuizBook] error on update quiz book [$e]");
+      return null;
+    }
+  }
+
   Future<int?> deleteQuizBook(int quizBookId) async {
     final db = await database;
 
