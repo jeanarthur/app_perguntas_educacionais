@@ -60,6 +60,22 @@ class _MyHomePageState extends State<HomeScreen> {
             appBar: AppBar(
               backgroundColor: Colors.brown,
               title: Text(widget.title, style: TextStyle(color: Colors.white),),
+              actions: [
+                InkWell(
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.brown[50],
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Image.network('https://avatar.iran.liara.run/public'),
+                    ),
+                  ),
+                )
+              ],
             ),
             body: Center(
               child: Column(
