@@ -4,4 +4,5 @@ abstract final class Routes {
   static const ranking = '/ranking';
   static const quizBookForm = '/quiz_book_form';
   static const profile = '/profile';
+  static const quiz = '/quiz';
 }

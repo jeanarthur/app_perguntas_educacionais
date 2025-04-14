@@ -27,7 +27,17 @@ class CategoriesViewModel extends ChangeNotifier {
   }
 
   void selectBook(int id) async {
-    quizBookRepository.setSelectedQuizBook(id);
+    log("[CategoriesViewModel] [selectBook] selecting quiz book with id: $id");
+    final result = await quizBookRepository.setSelectedQuizBook(id);
+    switch (result) {
+      case Ok():
+        log("[CategoriesViewModel] [selectBook] quiz book selected successfully");
+        notifyListeners();
+      case Error():
+        log("[CategoriesViewModel] [selectBook] error selecting quiz book: ${result.error}");
+        // TODO: Tratar erro
+        break;
+    }
   }
 
   void createBook(QuizBook quizBook) async {

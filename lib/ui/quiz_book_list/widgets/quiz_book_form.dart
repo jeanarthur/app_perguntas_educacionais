@@ -47,6 +47,7 @@ class _QuizBookFormState extends State<QuizBookForm> {
   void _showQuestionDialog() {
     showDialog(
       context: context, 
+      barrierDismissible: false,
       builder: (context) {
         return ValueListenableBuilder<bool>(
           valueListenable: _dialogState,
@@ -57,14 +58,30 @@ class _QuizBookFormState extends State<QuizBookForm> {
                 return Dialog(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: EditableQuestion(
-                      viewModel: _questionViewModel,
-                      question: question,
-                      onStateChanged: () {
-                        _dialogState.value = !_dialogState.value;
-                        _questionState.value = _questionViewModel.selectedQuestion;
-                      }
-                    )
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                        EditableQuestion(
+                          viewModel: _questionViewModel,
+                          question: question,
+                          onStateChanged: () {
+                            _dialogState.value = !_dialogState.value;
+                            _questionState.value = _questionViewModel.selectedQuestion;
+                          }
+                        ),
+                      ],
+                    ),
                   )
                 );
               }
@@ -80,24 +97,27 @@ class _QuizBookFormState extends State<QuizBookForm> {
     return Center(
           child: Align(
             alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  color: Colors.brown[100],
-                  child: EditableBook(
-                    quizBook: widget.quizBook, 
-                    scale: 2, 
-                    isValidCallback: (isValid, isChanged, editedQuizBook) => {
-                      setState(() {
-                        _isValid = isValid;
-                        _isChanged = isChanged;
-                        _editedQuizBook = editedQuizBook;
-                      })
-                    }),
-                ),
-                SizedBox(height: 15),
-                Builder(
+            child: ListenableBuilder(
+              listenable: _questionViewModel,
+              builder: (context, child) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Card(
+                      color: Colors.brown[100],
+                      child: EditableBook(
+                        quizBook: widget.quizBook, 
+                        scale: 2, 
+                        isValidCallback: (isValid, isChanged, editedQuizBook) => {
+                          setState(() {
+                            _isValid = isValid;
+                            _isChanged = isChanged;
+                            _editedQuizBook = editedQuizBook;
+                          })
+                        }),
+                    ),
+                    SizedBox(height: 15),
+                    Builder(
                       builder: (context) {
                         var saveButton = ElevatedButton(
                           onPressed: _editedQuizBook != null && ((!widget.isEditMode && _isValid) || (widget.isEditMode && _isChanged)) ? () {
@@ -140,7 +160,9 @@ class _QuizBookFormState extends State<QuizBookForm> {
                         ) : saveButton;
                       }
                     )
-              ],
+                  ],
+                );
+              }
             ),
           ),
         );

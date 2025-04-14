@@ -5,6 +5,8 @@ import 'package:app_perguntas_educacionais/ui/quiz_book_list/widgets/quiz_book_l
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
 import 'package:app_perguntas_educacionais/ui/home/widgets/home_screen.dart';
 import 'package:app_perguntas_educacionais/ui/ranking/widgets/ranking_screen.dart';
+import 'package:app_perguntas_educacionais/ui/quiz/widgets/quiz_screen.dart';
+import 'package:app_perguntas_educacionais/ui/quiz/view-models/quiz_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +53,20 @@ GoRouter router() => GoRouter(
       path: Routes.profile,
       pageBuilder: (context, state) {
         return simpleTransition(ProfileScreen());
+      }
+    ),
+    GoRoute(
+      path: Routes.quiz,
+      pageBuilder: (context, state) {
+        final quizBookId = state.extra as int?;
+        if (quizBookId == null) {
+          return simpleTransition(const Center(child: Text('ID do questionário inválido')));
+        }
+        final viewModel = QuizViewModel(
+          questionRepository: context.read(),
+          quizBookId: quizBookId
+        );
+        return simpleTransition(QuizScreen(viewModel: viewModel));
       }
     )
   ]

@@ -12,26 +12,44 @@ class HomeViewModel extends ChangeNotifier {
     load();
   }
 
-  QuizBook _selectedQuizBook = QuizBook(id: 0);
-  bool _isLoading = true;
-
   final QuizBookRepository quizBookRepository;
 
-  QuizBook get selectedQuizBook => _selectedQuizBook;
+  List<QuizBook> _quizBookList = [];
+  List<QuizBook> get quizBookList => _quizBookList;
+
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  void load() async {
-    var result = await quizBookRepository.getSelectedQuizBook();
-    _isLoading = false;
-    switch (result) {
-      case Ok():
-        _selectedQuizBook = result.value;
-        log('[home_view_model] Selected quiz book: ${selectedQuizBook.id} | ${selectedQuizBook.title} | ${selectedQuizBook.icon}');
-        notifyListeners();
-      case Error():
-        log('[home_view_model] Error on get selected quiz book: ${result.error}');
-        return;
-    }
+  int? _selectedQuizBookId;
+  int? get selectedQuizBookId => _selectedQuizBookId;
+
+  void selectQuizBook(int id) {
+    _selectedQuizBookId = id;
+    notifyListeners();
   }
 
+  void load() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final result = await quizBookRepository.getQuizBookList();
+    switch (result) {
+      case Ok():
+        _quizBookList = result.value;
+        final selectedResult = await quizBookRepository.getSelectedQuizBook();
+        switch (selectedResult) {
+          case Ok():
+            _selectedQuizBookId = selectedResult.value.id;
+          case Error():
+            // TODO: Tratar erro
+            break;
+        }
+      case Error():
+        // TODO: Tratar erro
+        break;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
 }

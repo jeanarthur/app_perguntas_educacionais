@@ -1,6 +1,9 @@
+import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:app_perguntas_educacionais/ui/core/ui/book.dart';
 import 'package:app_perguntas_educacionais/ui/home/view-models/home_view_model.dart';
+import 'package:app_perguntas_educacionais/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeCurrentBook extends StatelessWidget {
   const HomeCurrentBook({super.key, required this.viewModel});
@@ -9,45 +12,43 @@ class HomeCurrentBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    debugPrint("Render current selected quiz book: ${viewModel.selectedQuizBook.id} | ${viewModel.selectedQuizBook.title} | ${viewModel.selectedQuizBook.icon}");
-
-    Color getComplementaryColor(Color color) {
-      int red = (color.r * 255).toInt();
-      int green = (color.g * 255).toInt();
-      int blue = (color.b * 255).toInt();
-
-      // Calculate the complementary color
-      int compRed = 255 - red;
-      int compGreen = 255 - green;
-      int compBlue = 255 - blue;
-
-      return Color.fromARGB((color.a * 255).toInt(), compRed, compGreen, compBlue);
-    }
+    final selectedQuizBook = viewModel.quizBookList.firstWhere(
+      (quizBook) => quizBook.id == viewModel.selectedQuizBookId,
+      orElse: () => QuizBook(
+        id: -1,
+        title: "Nenhum livro selecionado",
+        icon: Icons.question_mark_outlined,
+        color: Color.fromARGB(255, 88, 88, 88)
+      )
+    );
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Card(
           color: Colors.brown[100],
-          child: Book(quizBook: viewModel.selectedQuizBook),
+          child: Book(quizBook: selectedQuizBook, scale: 2),
         ),
-        SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 6),
-                side: BorderSide(color: Colors.brown[100] as Color, width: 10, strokeAlign: 1),
-                backgroundColor: getComplementaryColor(viewModel.selectedQuizBook.color),
-                foregroundColor: Colors.white,
-              ),
-              child: Text("Iniciar", style: TextStyle(fontSize: 26)),
-            )
-          ],
-        )
+        const SizedBox(height: 15),
+        ElevatedButton(
+          onPressed: viewModel.selectedQuizBookId != -1 ? () {
+            context.push(Routes.quiz, extra: viewModel.selectedQuizBookId);
+          } : null,
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 6),
+            side: BorderSide(color: Colors.brown[100] as Color, width: 10, strokeAlign: 1),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.grey
+          ),
+          child: const Text("Iniciar", style: TextStyle(fontSize: 26)),
+        ),
       ],
     );
+  }
+
+  Color getComplementaryColor(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness(1 - hsl.lightness).toColor();
   }
 }

@@ -10,7 +10,7 @@ class QuestionListViewModel extends ChangeNotifier {
     required this.questionRepository,
     required this.quizBookId
   }) {
-    load();
+    loadQuestions();
   }
 
   final QuestionRepository questionRepository;
@@ -22,62 +22,69 @@ class QuestionListViewModel extends ChangeNotifier {
   Question? _selectedQuestion;
   Question? get selectedQuestion => _selectedQuestion;
 
-  int _currentIndex = 0;
+  int _currentIndex = -1;
   int get currentIndex => _currentIndex;
 
-  void load() async {
-    log("[QuestionListViewModel] Load questionList");
-    refreshList();
-  }
-
-  void refreshList() async {
+  Future<void> loadQuestions() async {
+    log("[QuestionListViewModel] [loadQuestions] Carregando questões para quizBookId: $quizBookId");
     final result = await questionRepository.getQuestionList(quizBookId);
     switch (result) {
       case Ok():
-        log("[QuestionListViewModel] questionList loaded: ${result.value}");
         _questionList = result.value;
-        if (_questionList.isNotEmpty && _selectedQuestion == null) {
-          _selectedQuestion = _questionList.first;
+        log("[QuestionListViewModel] [loadQuestions] ${_questionList.length} questões carregadas");
+        if (_questionList.isNotEmpty) {
           _currentIndex = 0;
+          final selectedResult = await questionRepository.getSelectedQuestion();
+          switch (selectedResult) {
+            case Ok():
+              _selectedQuestion = selectedResult.value;
+              log("[QuestionListViewModel] [loadQuestions] Questão selecionada: ${_selectedQuestion?.toString()}");
+            case Error():
+              log("[QuestionListViewModel] [loadQuestions] Erro ao selecionar questão: ${selectedResult.error}");
+              break;
+          }
+        } else {
+          _currentIndex = -1;
+          _selectedQuestion = null;
+          log("[QuestionListViewModel] [loadQuestions] Nenhuma questão encontrada");
         }
         notifyListeners();
-
       case Error():
-        return;
+        log("[QuestionListViewModel] [loadQuestions] Erro ao carregar questões: ${result.error}");
+        break;
     }
   }
 
-  void createQuestion(Question question) async {
-    log("[QuestionListViewModel] [createQuestion] creating question...");
-    await questionRepository.createQuestion(question);
-    refreshList();
+  void selectQuestion(int id) {
+    log("[QuestionListViewModel] [selectQuestion] Selecionando questão com id: $id");
+    if (id == -1) {
+      _currentIndex = -1;
+      _selectedQuestion = null;
+      notifyListeners();
+      return;
+    }
+    
+    final index = _questionList.indexWhere((q) => q.id == id);
+    if (index != -1) {
+      _currentIndex = index;
+      _selectedQuestion = _questionList[index];
+      notifyListeners();
+    }
   }
 
-  void updateQuestion(Question question) async {
-    log("[QuestionListViewModel] [updateQuestion] updating question...");
-    await questionRepository.updateQuestion(question);
-    refreshList();
-  }
-
-  void deleteQuestion(int id) async {
-    log("[QuestionListViewModel] [deleteQuestion] deleting question...");
-    await questionRepository.deleteQuestion(id);
-    refreshList();
-  }
-
-  void nextQuestion() async {
+  void nextQuestion() {
     if (_currentIndex < _questionList.length - 1) {
       _currentIndex++;
       _selectedQuestion = _questionList[_currentIndex];
       notifyListeners();
     } else {
-      _currentIndex = _questionList.length;
+      _currentIndex = -1;
       _selectedQuestion = null;
       notifyListeners();
     }
   }
 
-  void previousQuestion() async {
+  void previousQuestion() {
     if (_currentIndex > 0) {
       _currentIndex--;
       _selectedQuestion = _questionList[_currentIndex];
@@ -85,14 +92,42 @@ class QuestionListViewModel extends ChangeNotifier {
     }
   }
 
-  void selectQuestion(int index) {
-    if (index >= 0 && index < _questionList.length) {
-      _currentIndex = index;
-      _selectedQuestion = _questionList[index];
-    } else {
-      _currentIndex = _questionList.length;
-      _selectedQuestion = null;
+  Future<void> createQuestion(Question question) async {
+    log("[QuestionListViewModel] [createQuestion] Criando nova questão");
+    final result = await questionRepository.createQuestion(question);
+    switch (result) {
+      case Ok():
+        await loadQuestions();
+        log("[QuestionListViewModel] [createQuestion] Questão criada com sucesso");
+      case Error():
+        log("[QuestionListViewModel] [createQuestion] Erro ao criar questão: ${result.error}");
+        break;
     }
-    notifyListeners();
+  }
+
+  Future<void> updateQuestion(Question question) async {
+    log("[QuestionListViewModel] [updateQuestion] Atualizando questão ${question.id}");
+    final result = await questionRepository.updateQuestion(question);
+    switch (result) {
+      case Ok():
+        await loadQuestions();
+        log("[QuestionListViewModel] [updateQuestion] Questão atualizada com sucesso");
+      case Error():
+        log("[QuestionListViewModel] [updateQuestion] Erro ao atualizar questão: ${result.error}");
+        break;
+    }
+  }
+
+  Future<void> deleteQuestion(int id) async {
+    log("[QuestionListViewModel] [deleteQuestion] Removendo questão $id");
+    final result = await questionRepository.deleteQuestion(id);
+    switch (result) {
+      case Ok():
+        await loadQuestions();
+        log("[QuestionListViewModel] [deleteQuestion] Questão removida com sucesso");
+      case Error():
+        log("[QuestionListViewModel] [deleteQuestion] Erro ao remover questão: ${result.error}");
+        break;
+    }
   }
 } 

@@ -18,42 +18,82 @@ class QuestionRepositoryLocal implements QuestionRepository {
   int? get selectedQuizBookId => _selectedQuizBookId;
 
   List<Question>? _questionList;
+  List<Question>? get questionList => _questionList;
 
   @override
   Future<Result<Question>> getQuestion(int id) async {
-    final quizBookList = await _localDataService.getQuestionList(selectedQuizBookId!);
-    final quizBook = quizBookList.where((quizBook) => quizBook.id == id).firstOrNull;
-
-    if (quizBook != null) {
-      return Future.value(Result.ok(quizBook));
-    } else {
-      return Future.value(Result.error('Invalid quizBook id' as Exception));
+    log("[QuestionRepositoryLocal] [getQuestion] Buscando questão com id: $id");
+    if (_questionList == null) {
+      final result = await getQuestionList(_selectedQuizBookId!);
+      switch (result) {
+        case Ok():
+          _questionList = result.value;
+        case Error():
+          return Result.error(result.error);
+      }
+    }
+    
+    try {
+      final question = _questionList!.firstWhere((q) => q.id == id);
+      return Result.ok(question);
+    } catch (e) {
+      return Result.error(Exception('Questão não encontrada'));
     }
   }
 
   @override
   Future<Result<List<Question>>> getQuestionList(int quizBookId) async {
-    return Future.value(Result.ok(await _localDataService.getQuestionList(quizBookId)));
+    log("[QuestionRepositoryLocal] [getQuestionList] Carregando questões para quizBookId: $quizBookId");
+    _selectedQuizBookId = quizBookId;
+    try {
+      final questions = await _localDataService.getQuestionList(quizBookId);
+      _questionList = questions;
+      log("[QuestionRepositoryLocal] [getQuestionList] ${questions.length} questões carregadas");
+      if (_questionList!.isNotEmpty) {
+        _selectedQuestion = _questionList!.first;
+      }
+      return Result.ok(questions);
+    } catch (e) {
+      log("[QuestionRepositoryLocal] [getQuestionList] Erro ao carregar questões: $e");
+      return Result.error(Exception('Erro ao carregar questões'));
+    }
   }
 
   @override
   Future<Result<Question>> getSelectedQuestion() async {
-    log("[QuestionRepositoryLocal] [getSelectedQuestion] initialSelectedQuestion: ${_selectedQuestion.toString()}");
+    log("[QuestionRepositoryLocal] [getSelectedQuestion] Questão selecionada: ${_selectedQuestion?.toString()}");
     if (_selectedQuestion == null) {
-      var resultFallback = await getQuestionList(selectedQuizBookId!);
-        switch (resultFallback) {
+      if (_questionList == null) {
+        log("[QuestionRepositoryLocal] [getSelectedQuestion] Lista de questões nula, carregando...");
+        final result = await getQuestionList(_selectedQuizBookId!);
+        switch (result) {
           case Ok():
-            _selectedQuestion = resultFallback.value.first;
+            _questionList = result.value;
+            if (_questionList!.isNotEmpty) {
+              _selectedQuestion = _questionList!.first;
+              log("[QuestionRepositoryLocal] [getSelectedQuestion] Primeira questão selecionada: ${_selectedQuestion?.toString()}");
+            } else {
+              log("[QuestionRepositoryLocal] [getSelectedQuestion] Nenhuma questão encontrada");
+              return Result.error(Exception('Nenhuma questão disponível'));
+            }
           case Error():
-            return Result.error(resultFallback.error);
+            return Result.error(result.error);
         }
+      } else if (_questionList!.isEmpty) {
+        log("[QuestionRepositoryLocal] [getSelectedQuestion] Lista de questões vazia");
+        return Result.error(Exception('Nenhuma questão disponível'));
+      } else {
+        _selectedQuestion = _questionList!.first;
+        log("[QuestionRepositoryLocal] [getSelectedQuestion] Primeira questão da lista selecionada: ${_selectedQuestion?.toString()}");
+      }
     }
-    return Future.value(Result.ok(_selectedQuestion!));
+    return Result.ok(_selectedQuestion!);
   }
 
   @override
   Future<Result<void>> setSelectedQuestion(int id) async {
-    var result = await getQuestion(id);
+    log("[QuestionRepositoryLocal] [setSelectedQuestion] Definindo questão selecionada: $id");
+    final result = await getQuestion(id);
     switch (result) {
       case Ok():
         _selectedQuestion = result.value;
@@ -64,50 +104,77 @@ class QuestionRepositoryLocal implements QuestionRepository {
   }
   
   @override
-  Future<Result<void>> createQuestion(Question quizBook) async {
-    var result = await _localDataService.createQuestion(quizBook);
-    if (result != null) {
-      return Future.value(Result.ok(null));
-    } else {
-      return Future.value(Result.error('Error on create quiz book' as Exception));
+  Future<Result<void>> createQuestion(Question question) async {
+    log("[QuestionRepositoryLocal] [createQuestion] Criando nova questão");
+    try {
+      await _localDataService.createQuestion(question);
+      _questionList = null; // Força recarregamento na próxima requisição
+      return const Result.ok(null);
+    } catch (e) {
+      log("[QuestionRepositoryLocal] [createQuestion] Erro ao criar questão: $e");
+      return Result.error(Exception('Erro ao criar questão'));
     }
   }
   
   @override
   Future<Result<void>> deleteQuestion(int id) async {
-    var result = await _localDataService.deleteQuestion(id);
-    if (result != null) {
+    log("[QuestionRepositoryLocal] [deleteQuestion] Removendo questão: $id");
+    try {
+      await _localDataService.deleteQuestion(id);
       if (_selectedQuestion?.id == id) {
         _selectedQuestion = null;
       }
-      return Future.value(Result.ok(null));
-    } else {
-      return Future.value(Result.error(Exception('Error on delete quiz book')));
+      _questionList = null; // Força recarregamento na próxima requisição
+      return const Result.ok(null);
+    } catch (e) {
+      log("[QuestionRepositoryLocal] [deleteQuestion] Erro ao remover questão: $e");
+      return Result.error(Exception('Erro ao remover questão'));
     }
   }
   
   @override
-  Future<Result<void>> updateQuestion(Question quizBook) async {
-    var result = await _localDataService.updateQuestion(quizBook);
-    if (result != null) {
-      if (_selectedQuestion?.id == quizBook.id) {
-        _selectedQuestion = quizBook;
+  Future<Result<void>> updateQuestion(Question question) async {
+    log("[QuestionRepositoryLocal] [updateQuestion] Atualizando questão: ${question.id}");
+    try {
+      await _localDataService.updateQuestion(question);
+      if (_selectedQuestion?.id == question.id) {
+        _selectedQuestion = question;
       }
-      return Future.value(Result.ok(null));
-    } else {
-      return Future.value(Result.error(Exception('Error on delete quiz book')));
+      _questionList = null; // Força recarregamento na próxima requisição
+      return const Result.ok(null);
+    } catch (e) {
+      log("[QuestionRepositoryLocal] [updateQuestion] Erro ao atualizar questão: $e");
+      return Result.error(Exception('Erro ao atualizar questão'));
     }
   }
   
   @override
-  Future<Result<Question>> getNextQuestion() {
-    // TODO: implement getNextQuestion
-    throw UnimplementedError();
+  Future<Result<Question>> getNextQuestion() async {
+    if (_questionList == null || _questionList!.isEmpty) {
+      return Result.error(Exception('Nenhuma questão disponível'));
+    }
+    
+    final currentIndex = _questionList!.indexWhere((q) => q.id == _selectedQuestion?.id);
+    if (currentIndex == -1 || currentIndex >= _questionList!.length - 1) {
+      return Result.error(Exception('Não há próxima questão'));
+    }
+    
+    _selectedQuestion = _questionList![currentIndex + 1];
+    return Result.ok(_selectedQuestion!);
   }
   
   @override
-  Future<Result<Question>> getPreviousQuestion() {
-    // TODO: implement getPreviousQuestion
-    throw UnimplementedError();
+  Future<Result<Question>> getPreviousQuestion() async {
+    if (_questionList == null || _questionList!.isEmpty) {
+      return Result.error(Exception('Nenhuma questão disponível'));
+    }
+    
+    final currentIndex = _questionList!.indexWhere((q) => q.id == _selectedQuestion?.id);
+    if (currentIndex <= 0) {
+      return Result.error(Exception('Não há questão anterior'));
+    }
+    
+    _selectedQuestion = _questionList![currentIndex - 1];
+    return Result.ok(_selectedQuestion!);
   }
 }

@@ -48,12 +48,15 @@ class QuizBookRepositoryLocal implements QuizBookRepository {
 
   @override
   Future<Result<void>> setSelectedQuizBook(int id) async {
+    log("[QuizBookRepositoryLocal] [setSelectedQuizBook] setting selected quiz book to id: $id");
     var result = await getQuizBook(id);
     switch (result) {
       case Ok():
         _selectedQuizBook = result.value;
+        log("[QuizBookRepositoryLocal] [setSelectedQuizBook] selected quiz book set to: ${_selectedQuizBook?.toString()}");
         return const Result.ok(null);
       case Error():
+        log("[QuizBookRepositoryLocal] [setSelectedQuizBook] error setting selected quiz book: ${result.error}");
         return Result.error(result.error);
     }
   }
