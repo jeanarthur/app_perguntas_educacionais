@@ -138,13 +138,62 @@ class _EditableQuestionState extends State<EditableQuestion> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    isNewQuestion ? "Nova Questão" : "Editar Questão",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown[900],
-                    ),
+                  Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          isNewQuestion ? "Nova Questão" : "Editar Questão",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.brown[900],
+                          ),
+                        ),
+                      ),
+                      if (!isNewQuestion)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              developer.log("[EditableQuestion] [onPressed] Remover - currentQuestion: ${_currentQuestion.value?.toString()}");
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text("Confirmar remoção"),
+                                  content: const Text("Tem certeza que deseja remover esta questão?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: const Text("Cancelar"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        developer.log("[EditableQuestion] [onPressed] Confirmar remoção - questionId: ${_currentQuestion.value?.id}");
+                                        widget.viewModel.deleteQuestion(_currentQuestion.value!.id);
+                                        Navigator.of(context).pop();
+                                        if (widget.viewModel.currentIndex > 0) {
+                                          widget.viewModel.previousQuestion();
+                                          _updateForm(widget.viewModel.selectedQuestion);
+                                        } else if (widget.viewModel.questionList.isNotEmpty) {
+                                          widget.viewModel.nextQuestion();
+                                          _updateForm(widget.viewModel.selectedQuestion);
+                                        } else {
+                                          _clearForm();
+                                          widget.viewModel.selectQuestion(-1);
+                                          widget.onStateChanged?.call();
+                                        }
+                                      },
+                                      child: const Text("Remover"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -211,7 +260,8 @@ class _EditableQuestionState extends State<EditableQuestion> {
                     children: [
                       Flexible(
                         child: ElevatedButton(
-                          onPressed: widget.viewModel.currentIndex > 0 ? () {
+                          onPressed: widget.viewModel.questionList.isNotEmpty && 
+                            (widget.viewModel.currentIndex == -1 || widget.viewModel.currentIndex > 0) ? () {
                             developer.log("[EditableQuestion] [onPressed] Anterior - currentIndex: ${widget.viewModel.currentIndex}");
                             widget.viewModel.previousQuestion();
                             _updateForm(widget.viewModel.selectedQuestion);
@@ -270,52 +320,6 @@ class _EditableQuestionState extends State<EditableQuestion> {
                       ),
                     ],
                   ),
-                  if (!isNewQuestion) ...[
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        developer.log("[EditableQuestion] [onPressed] Remover - currentQuestion: ${_currentQuestion.value?.toString()}");
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text("Confirmar remoção"),
-                            content: const Text("Tem certeza que deseja remover esta questão?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text("Cancelar"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  developer.log("[EditableQuestion] [onPressed] Confirmar remoção - questionId: ${_currentQuestion.value?.id}");
-                                  widget.viewModel.deleteQuestion(_currentQuestion.value!.id);
-                                  Navigator.of(context).pop();
-                                  if (widget.viewModel.currentIndex > 0) {
-                                    widget.viewModel.previousQuestion();
-                                    _updateForm(widget.viewModel.selectedQuestion);
-                                  } else if (widget.viewModel.questionList.isNotEmpty) {
-                                    widget.viewModel.nextQuestion();
-                                    _updateForm(widget.viewModel.selectedQuestion);
-                                  } else {
-                                    _clearForm();
-                                    widget.viewModel.selectQuestion(-1);
-                                    widget.onStateChanged?.call();
-                                  }
-                                },
-                                child: const Text("Remover"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        backgroundColor: Colors.red[300],
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("Remover Questão"),
-                    ),
-                  ],
                 ],
               ),
             );

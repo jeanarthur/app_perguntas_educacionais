@@ -85,11 +85,16 @@ class QuestionListViewModel extends ChangeNotifier {
   }
 
   void previousQuestion() {
-    if (_currentIndex > 0) {
+    log("[QuestionListViewModel] [previousQuestion] currentIndex: $_currentIndex");
+    if (_currentIndex == -1) {
+      // Se estiver no modo de criação, vai para a última questão
+      _currentIndex = _questionList.length - 1;
+      _selectedQuestion = _questionList.last;
+    } else if (_currentIndex > 0) {
       _currentIndex--;
       _selectedQuestion = _questionList[_currentIndex];
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   Future<void> createQuestion(Question question) async {
