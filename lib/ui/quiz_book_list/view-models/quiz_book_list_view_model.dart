@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_perguntas_educacionais/data/repositories/question/question_repository.dart';
 import 'package:app_perguntas_educacionais/data/repositories/quiz_book/quiz_book_repository.dart';
 import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:app_perguntas_educacionais/utils/result.dart';
@@ -7,12 +8,14 @@ import 'package:flutter/material.dart';
 
 class CategoriesViewModel extends ChangeNotifier {
   CategoriesViewModel({
-    required this.quizBookRepository
+    required this.quizBookRepository,
+    required this.questionRepository
   }) {
     load();
   }
 
   final QuizBookRepository quizBookRepository;
+  final QuestionRepository questionRepository;
 
   List<QuizBook> _quizBookList = [];
 
@@ -60,5 +63,4 @@ class CategoriesViewModel extends ChangeNotifier {
         return;
     }
   }
-
 }

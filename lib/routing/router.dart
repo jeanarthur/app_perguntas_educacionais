@@ -25,7 +25,8 @@ GoRouter router() => GoRouter(
       path: Routes.quizBookList,
       pageBuilder: (context, state) {
         final viewModel = CategoriesViewModel(
-          quizBookRepository: context.read()
+          quizBookRepository: context.read(),
+          questionRepository: context.read()
         );
         return simpleTransition(Questionaries(viewModel: viewModel));
       }
@@ -34,7 +35,8 @@ GoRouter router() => GoRouter(
       path: Routes.quizBookForm,
       pageBuilder: (context, state) {
         final viewModel = CategoriesViewModel(
-          quizBookRepository: context.read()
+          quizBookRepository: context.read(),
+          questionRepository: context.read()
         );
         return simpleTransition(Questionaries(viewModel: viewModel, index: 1));
       }

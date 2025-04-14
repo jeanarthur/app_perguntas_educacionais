@@ -95,7 +95,7 @@ class _QuestionariesState extends State<Questionaries> {
               case 1: return QuizBookForm(
                 parent: widget, 
                 quizBook: QuizBook(id: -1, title: "", icon: Icons.question_mark_outlined, color: Color.fromARGB(255, 88, 88, 88)),
-                createCallback: () => {
+                createCallback: (quizBook) => {
                   setState(() {
                     _index = 0;
                   })

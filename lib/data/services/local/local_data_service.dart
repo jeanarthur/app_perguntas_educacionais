@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_perguntas_educacionais/domain/models/question/question.dart';
 import 'package:app_perguntas_educacionais/domain/models/quiz_book/quiz_book.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -94,4 +95,93 @@ class LocalDataService {
       return null;
     }
   }
+
+  Future<Database> get questionDatabase async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    return await openDatabase(
+      join(await getDatabasesPath(), 'question_sqlite.db'),
+      onCreate: (db, version) {
+        return db.execute('CREATE TABLE questions(id INTEGER PRIMARY KEY, quizBookId INTEGRE, title TEXT, options TEXT, correctOptionIndex INTEGER)');
+      },
+      version: 1
+    );
+  }
+
+  Future<List<Question>> getQuestionList(int quizBookId) async {
+    final db = await questionDatabase;
+
+    final List<Map<String, Object?>> questionMaps = await db.query('questions', where: 'quizBookId = ?', whereArgs: [quizBookId]);
+
+    return [
+      for (final {'id': id as int, 'quizBookId': quizBookId as int, 'title': title as String, 'options': options as String, 'correctOptionIndex': correctOptionIndex as int}
+          in questionMaps)
+        Question(id: id, quizBookId: quizBookId, title: title, options: options.split("<endOption>"), correctOptionIndex: correctOptionIndex),
+    ];
+  }
+
+  Future<int?> createQuestion(Question question) async {
+    final db = await questionDatabase;
+
+    if (question.id == -1) {
+      var result = await db.query('questions', columns: ['id'], orderBy: "id desc", limit: 1);
+      if (result.isNotEmpty){
+        int lastUsedId = result.first['id'] as int;
+        question.id = lastUsedId + 1;
+      } else {
+        question.id = 0;
+      }
+    }
+
+    log("[LocalDataService] [createQuestion] creating ${question.toString()}");
+    try {
+      await db.insert(
+        'questions',
+        question.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      log("[LocalDataService] [createQuestion] created question ${question.title}");
+      return question.id;
+    } on Exception catch (e) {
+      log("[LocalDataService] [createQuestion] error on create question [$e]");
+      return null;
+    }
+  }
+
+  Future<int?> updateQuestion(Question question) async {
+    final db = await questionDatabase;
+
+    log("[LocalDataService] [updateQuestion] updating ${question.toString()}");
+    try {
+      int rows = await db.update(
+        'questions',
+        question.toMap(),
+        where: 'id = ?',
+        whereArgs: [question.id],
+      );
+      log("[LocalDataService] [updateQuestion] updated question [rows affected: $rows]");
+      return question.id;
+    } on Exception catch (e) {
+      log("[LocalDataService] [updateQuestion] error on update question [$e]");
+      return null;
+    }
+  }
+
+  Future<int?> deleteQuestion(int questionId) async {
+    final db = await questionDatabase;
+
+    try {
+      int rows = await db.delete(
+        'questions',
+        where: 'id = ?',
+        whereArgs: [questionId],
+      );
+      log("[LocalDataService] [deleteQuestion] deleted question [rows affected: $rows]");
+      return rows;
+    } on Exception catch (e) {
+      log("[LocalDataService] [deleteQuestion] error on delete question [$e]");
+      return null;
+    }
+  }
+
 }
